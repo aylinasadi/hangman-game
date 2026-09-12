@@ -5,12 +5,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Game() {
     const location = useLocation();
-    const difficulty = location.state?.chosenDifficulty || "easy";
+    const difficulty = location.state?.chosenDifficulty || "Easy";
     useEffect(() => {
         const wordLength = {
-            easy: 5,
-            medium: 7,
-            hard: 10,
+            Easy: 5,
+            Medium: 7,
+            Hard: 10,
         };
         const targetLength = wordLength[difficulty] || 5;
         const fetchWord = async () => {
@@ -29,17 +29,33 @@ export default function Game() {
     const [word, setWord] = useState("");
     const [guessedLetters, setGuessedLetters] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [hintsUsed, setHintsUsed] = useState(0);
     const handleGuess = (letter) => {
         setGuessedLetters((prevGuessed) => {
         if (prevGuessed.includes(letter)) return prevGuessed;
         return [...prevGuessed, letter];
         });
     };
+    const maxHints = word.length > 0 ? Math.floor(word.length / 2) : 0;
+    const handleHint = () => {
+        if (hintsUsed >= maxHints) return;
+        const unguessedLetters = word.split("").filter((letter) => !guessedLetters.includes(letter));
+        if (unguessedLetters.length === 0) return;
+        const randomLetter = unguessedLetters[Math.floor(Math.random() * unguessedLetters.length)];
+        setGuessedLetters((prev) => [...prev, randomLetter]);
+        setHintsUsed((prev) => prev + 1);
+    }
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
     const mistakeCount = guessedLetters.filter((letter) => !word.includes(letter)).length;
     const maxMistakes = 6;
     const isLost = mistakeCount >= maxMistakes;
     const isWon = word.length > 0 &&word.split("").every((letter) => guessedLetters.includes(letter));
+    const handleQuit = () => {
+        const confirmQuit = window.confirm("Are you sure you want to quit this game?");
+        if (confirmQuit) {
+            navigate("/");
+        }
+    };
     const navigate = useNavigate();
     useEffect(() => {
         if (isWon || isLost) {
@@ -67,10 +83,14 @@ export default function Game() {
     return (
         <div className="container mt-5" style={{ maxWidth: "600px"}}>
             <div className="card shadow-sm p-4 text-center">
-                <h1>Game Screen</h1>
-                <div className="d-flex justify-content-between mb-4">
-                    <span className="badge bg-secondary text-uppercase">Difficulty: {difficulty}</span>
-                    <span className="badge bg-danger text-uppercase">Lives remaining: {maxMistakes - mistakeCount} / {maxMistakes}</span>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                    <span>Difficulty: {difficulty}</span>
+                    <span>Hints Remaining: {maxHints - hintsUsed}</span>
+                    <span className="text-danger">Lives Remaining: {maxMistakes - mistakeCount} / {maxMistakes}</span>
+                </div>
+                <div className="d-flex justify-content-between mb-3">
+                    <button className="btn btn-sm btn-outline-primary" onClick={handleHint} disabled={loading || isWon || isLost || hintsUsed >= maxHints}>Hint</button>
+                    <button className="btn btn-outline-danger btn-sm text-uppercase" onClick={handleQuit}>Quit</button>
                 </div>
                 <div className="mb-4 fs-1 font-monospace" style={{ letterSpacing: "0.5rem" }}>
                     {loading ? (<p className="fs-5 text-muted">Loading word...</p>) :
@@ -91,7 +111,6 @@ export default function Game() {
                         >
                             {letter}
                         </button>
-                        /* add hint button */
                     ))}
                 </div>
             </div>
