@@ -60,11 +60,12 @@ export default function Game() {
                 state: {
                     hasWon:isWon,
                     secretWord:word,
-                    score: remainingLives
+                    score: remainingLives,
+                    hintsUsed: hintsUsed,
                 },
             });
         }
-    }, [isWon, isLost, navigate, word, remainingLives]);
+    }, [isWon, isLost, navigate, word, remainingLives, hintsUsed]);
 
     useEffect(() => {
         if (loading || isWon || isLost) return;
@@ -108,8 +109,7 @@ export default function Game() {
     
 
     return (
-        <div className="container mt-5" style={{ maxWidth: "600px"}}>
-            <div className="card shadow-sm p-4 text-center">
+            <div className="p-4 text-center">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                     <span>Difficulty: {difficulty}</span>
                     <span>Hints Remaining: {maxHints - hintsUsed}</span>
@@ -141,6 +141,5 @@ export default function Game() {
                     ))}
                 </div>
             </div>
-        </div>
     );
 }
