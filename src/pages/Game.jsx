@@ -65,20 +65,36 @@ export default function Game() {
     
 
     return (
-        <div>
-            <h1>Game Screen</h1>
-            <p>Lives remaining: {maxMistakes - mistakeCount} / {maxMistakes}</p>
-            <p>Difficulty: {difficulty}</p>
-            {loading ? <p>Loading word...</p> : <p>{word.split("").map((letter) => (guessedLetters.includes(letter) ? letter : "_ "))}</p>}
-            {alphabet.map((letter) => (
-                <button
-                key={letter}
-                onClick={() => handleGuess(letter)}
-                disabled={guessedLetters.includes(letter)}
-                >
-                {letter}
-                </button>
-            ))}
+        <div className="container mt-5" style={{ maxWidth: "600px"}}>
+            <div className="card shadow-sm p-4 text-center">
+                <h1>Game Screen</h1>
+                <div className="d-flex justify-content-between mb-4">
+                    <span className="badge bg-secondary text-uppercase">Difficulty: {difficulty}</span>
+                    <span className="badge bg-danger text-uppercase">Lives remaining: {maxMistakes - mistakeCount} / {maxMistakes}</span>
+                </div>
+                <div className="mb-4 fs-1 font-monospace" style={{ letterSpacing: "0.5rem" }}>
+                    {loading ? (<p className="fs-5 text-muted">Loading word...</p>) :
+                    (word.split("").map((letter, index) => (
+                    <span key={index} className="mx-1">
+                        {guessedLetters.includes(letter) ? letter : "_ "}
+                    </span>
+                    )))}
+                </div>
+                <div className="d-flex flex-wrap justify-content-center gap-2 mt-4">
+                    {alphabet.map((letter) => (
+                        <button
+                            key={letter}
+                            onClick={() => handleGuess(letter)}
+                            disabled={guessedLetters.includes(letter) || isWon || isLost}
+                            className="btn btn-outline-primary"
+                            style={{ width: "40px", height: "40px", padding: "0" }}
+                        >
+                            {letter}
+                        </button>
+                        /* add hint button */
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }
