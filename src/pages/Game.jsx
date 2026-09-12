@@ -15,13 +15,17 @@ export default function Game() {
         const targetLength = wordLength[difficulty] || 5;
         const fetchWord = async () => {
             try {
-                const response = await fetch(`https://random-word-api.herokuapp.com/word?length=${targetLength}`);
+                setLoading(true);
+                const pattern = "?".repeat(targetLength);
+                const response = await fetch(`https://api.datamuse.com/words?sp=${pattern}&max=100`);
                 const data = await response.json();
-                setWord(data[0].toUpperCase());
-                setLoading(false);
+                const singleWords = data.filter((item) => /^[a-zA-Z]+$/.test(item.word));
+                const randomIndex = Math.floor(Math.random() * singleWords.length);
+                setWord(singleWords[randomIndex].word.toUpperCase());
             } catch (error) {
-                setLoading(false);
                 console.error("Error fetching word:", error);
+            } finally {
+                setLoading(false);
             }
         };
         fetchWord();
