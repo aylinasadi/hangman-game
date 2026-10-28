@@ -109,37 +109,39 @@ export default function Game() {
     
 
     return (
-            <div className="p-4 text-center">
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                    <span>Difficulty: {difficulty}</span>
-                    <span>Hints Remaining: {maxHints - hintsUsed}</span>
-                    <span className="text-danger">Lives Remaining: {remainingLives} / {maxLives}</span>
-                </div>
-                <div className="d-flex justify-content-between mb-3">
-                    <button className="btn btn-sm btn-outline-primary" onClick={handleHint} disabled={loading || isWon || isLost || hintsUsed >= maxHints}>Hint</button>
-                    <button className="btn btn-outline-danger btn-sm text-uppercase" onClick={handleQuit}>Quit</button>
-                </div>
-                <div className="mb-4 fs-1 font-monospace" style={{ letterSpacing: "0.5rem" }}>
-                    {loading ? (<p className="fs-5 text-muted">Loading word...</p>) :
+        <div className="min-vh-100 d-flex flex-column p-4 p-md-5 text-center">
+            <div className="d-flex justify-content-between align-items-center mb-3 fs-4">
+                <span>Difficulty: {difficulty}</span>
+                <span>Hints Remaining: {maxHints - hintsUsed}</span>
+                <span className="text-danger">Lives Remaining: {remainingLives} / {maxLives}</span>
+            </div>
+            <div className="d-flex justify-content-between mb-3">
+                <button className="btn btn-lg btn-outline-primary px-4" onClick={handleHint} disabled={loading || isWon || isLost || hintsUsed >= maxHints}>Hint</button>
+                <button className="btn btn-lg btn-outline-danger text-uppercase px-4" onClick={handleQuit}>Quit</button>
+            </div>
+            <div className="flex-grow-1 d-flex flex-column align-items-center justify-content-center">
+                <div className="mb-5 font-monospace" style={{ fontSize: "5rem", letterSpacing: "1rem" }}>
+                    {loading ? (<p className="fs-3 text-muted">Loading word...</p>) :
                     (word.split("").map((letter, index) => (
-                    <span key={index} className="mx-1">
-                        {guessedLetters.includes(letter) ? letter : "_"}
-                    </span>
+                        <span key={index} className="mx-1">
+                            {guessedLetters.includes(letter) ? letter : "_"}
+                        </span>
                     )))}
                 </div>
-                <div className="d-flex flex-wrap justify-content-center gap-2 mt-4">
+                <div className="d-flex flex-wrap justify-content-center gap-3" style={{ maxWidth: "1000px" }}>
                     {alphabet.map((letter) => (
                         <button
                             key={letter}
                             onClick={() => handleGuess(letter)}
                             disabled={guessedLetters.includes(letter) || isWon || isLost}
-                            className="btn btn-outline-primary"
-                            style={{ width: "40px", height: "40px", padding: "0" }}
+                            className="btn btn-outline-primary fs-4"
+                            stylen={{ width: "64px", height: "64px", padding: "0" }}
                         >
                             {letter}
                         </button>
                     ))}
                 </div>
             </div>
+        </div>
     );
 }

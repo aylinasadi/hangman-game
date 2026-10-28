@@ -10,16 +10,16 @@ export default function Home() {
     };
 
     return (
-        <div className="container mt-5 my-5" style={{ maxWidth: "500px"}}>
-            <div className="card shadow p-4 text-center">
-            <div className="container text-center">
-                <h1 className="mb-5">Hangman Game</h1>
-                <p>Default Difficulty: {difficulty}</p>
-                <button className="btn btn-outline-primary mx-1" onClick={() => setDifficulty("Easy")}>Easy</button>
-                <button className="btn btn-outline-primary mx-1" onClick={() => setDifficulty("Medium")}>Medium</button>
-                <button className="btn btn-outline-primary mx-1" onClick={() => setDifficulty("Hard")}>Hard</button>
-            </div>
-            <button className="btn btn-success mx-5 my-3" onClick={startGame}>Start Game</button>
+        <div className="min-vh-100 d-flex align-items-center justify-content-center p-3">
+            <div className="card shadow p-5 text-center w-100" style={{ maxWidth: "800px" }}>
+                <h1 className="title display-3 mb-5">Hangman Game</h1>
+                <p className="fs-3 mb-4">Default Difficulty: {difficulty}</p>
+                <div className="d-flex justify-content-center gap-3 mb-5">
+                    <button className="btn btn-outline-primary btn-lg px-4" onClick={() => setDifficulty("Easy")}>Easy</button>
+                    <button className="btn btn-outline-primary btn-lg px-4" onClick={() => setDifficulty("Medium")}>Medium</button>
+                    <button className="btn btn-outline-primary btn-lg px-4" onClick={() => setDifficulty("Hard")}>Hard</button>
+                </div>
+                <button className="btn btn-success btn-lg fs-3 w-100 py-3" onClick={startGame}>Start Game</button>
             </div>
         </div>
     );

@@ -41,21 +41,21 @@ export default function GameOver() {
     }, [secretWord]);
 
     return (
-        <div className="container mt-5 my-5" style={{ maxWidth: "500px"}}>
-            <div className="card shadow p-4 text-center">
-                <div className={`alert ${hasWon ? "alert-success" : "alert-danger"} my-3`}>
-                    <h1 className="alert-heading">{hasWon ? "You Survived!" : "You Died."}</h1>
+        <div className="min-vh-100 d-flex align-items-center justify-content-center p-3">
+            <div className="card shadow p-5 text-center w-100" style={{ maxWidth: "800px" }}>
+                <div className={`alert ${hasWon ? "alert-success" : "alert-danger"} my-3 py-4`}>
+                    <h1 className="display-3 fw-bold alert-heading mb-0">{hasWon ? "You Survived!" : "You Died."}</h1>
                 </div>
-                <p className="fs-4">
-                    The secret word was: <span className="badge bg-secondary font-monospace fs-6">{secretWord}</span>
+                <p className="display-6 mt-4">
+                    The secret word was: <span className="badge bg-secondary font-monospace">{secretWord}</span>
                 </p>
-                <p className="mb-0">
+                <p className="fs-4 mb-0">
                     {defLoading ? "Loading definition..." : definition ? `Definition: ${definition}` : "Oops! No definition found. You had a very rare word:)"}
                 </p>
-                {hasWon && <p className="text-muted my-4">Remaining Lives: {score}</p>}
-                <p className="text-muted">Hints Used: {hintsUsed}</p>
+                {hasWon && <p className="text-muted fs-4 my-4">Remaining Lives: {score}</p>}
+                <p className="text-muted fs-4 mt-4">Hints Used: {hintsUsed}</p>
                 <div className="d-flex justify-content-center gap-2 mt-4">
-                    <button className="btn btn-primary" onClick={() => navigate("/")}>Home</button>
+                    <button className="btn btn-primary btn-lg fs-3 px-5 py-3" onClick={() => navigate("/")}>Home</button>
                 </div>
             </div>
         </div>
