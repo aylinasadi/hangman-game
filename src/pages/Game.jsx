@@ -111,16 +111,16 @@ export default function Game() {
     return (
         <div className="min-vh-100 d-flex flex-column p-4 p-md-5 text-center">
             <div className="d-flex justify-content-between align-items-center mb-3 fs-4">
-                <span>Difficulty: {difficulty}</span>
-                <span>Hints Remaining: {maxHints - hintsUsed}</span>
+                <span className="game-stat">Difficulty: <strong>{difficulty}</strong></span>
+                <span className="game-stat">Hints Remaining: <strong>{maxHints - hintsUsed}</strong></span>
                 <span className="text-danger">Lives Remaining: {remainingLives} / {maxLives}</span>
             </div>
             <div className="d-flex justify-content-between mb-3">
-                <button className="btn btn-lg btn-outline-primary px-4" onClick={handleHint} disabled={loading || isWon || isLost || hintsUsed >= maxHints}>Hint</button>
-                <button className="btn btn-lg btn-outline-danger text-uppercase px-4" onClick={handleQuit}>Quit</button>
+                <button className="btn btn-lg px-4 hint-button" onClick={handleHint} disabled={loading || isWon || isLost || hintsUsed >= maxHints}>Hint</button>
+                <button className="btn btn-lg text-uppercase px-4 quit-button" onClick={handleQuit}>Quit</button>
             </div>
             <div className="flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-                <div className="mb-5 font-monospace" style={{ fontSize: "5rem", letterSpacing: "1rem" }}>
+                <div className="word-display mb-5 font-monospace" style={{ fontSize: "5rem", letterSpacing: "1rem" }}>
                     {loading ? (<p className="fs-3 text-muted">Loading word...</p>) :
                     (word.split("").map((letter, index) => (
                         <span key={index} className="mx-1">
@@ -134,8 +134,7 @@ export default function Game() {
                             key={letter}
                             onClick={() => handleGuess(letter)}
                             disabled={guessedLetters.includes(letter) || isWon || isLost}
-                            className="btn btn-outline-primary fs-4"
-                            stylen={{ width: "64px", height: "64px", padding: "0" }}
+                            className="btn fs-4 keyboard-key"
                         >
                             {letter}
                         </button>
