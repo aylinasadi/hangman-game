@@ -16,6 +16,10 @@
     --blood-bright: #c14a4f;
     --bone: #f2d8c6;
     --ash: #30282a;
+    --blood-text: #f09a96;
+    --line: #9a6f78;
+    --focus: #ffd166;
+    color-scheme: dark;
 }
 
 * {
@@ -50,7 +54,7 @@ button {
 }
 
 .text-danger {
-    color: var(--coral) !important;
+    color: var(--blood-text) !important;
 }
 
 .title {
@@ -66,7 +70,7 @@ button {
 .difficulty-button,
 .keyboard-key {
     color: var(--bone);
-    border-color: var(--surface-border);
+    border-color: var(--line);
     background: rgba(48, 33, 36, 0.7);
     transition: color 160ms ease, background 160ms ease, border-color 160ms ease, transform 160ms ease;
 }
@@ -85,6 +89,7 @@ button {
     color: #fff3ec;
     background: var(--blood);
     border-color: var(--blood-bright);
+    box-shadow: inset 0 0 0 2px var(--bone);
 }
 
 .start-button,
@@ -100,13 +105,13 @@ button {
 .home-button:hover,
 .home-button:focus-visible {
     color: #fff3ec;
-    background: var(--blood-bright);
-    border-color: var(--blood-bright);
+    background: #b0383e;
+    border-color: #b0383e;
 }
 
 .hint-button {
     color: var(--bone);
-    border-color: rgba(193, 74, 79, 0.7);
+    border-color: #d4686e;
 }
 
 .hint-button:hover:not(:disabled),
@@ -118,7 +123,7 @@ button {
 
 .quit-button {
     color: #dc7772;
-    border-color: rgba(193, 74, 79, 0.7);
+    border-color: #d4686e;
 }
 
 .quit-button:hover,
@@ -147,10 +152,31 @@ button {
 }
 
 .keyboard-key:disabled {
-    color: #756568;
-    border-color: #3e2d30;
+    color: #a08f8d;
+    border-color: #7d6a6d;
     background: rgba(24, 18, 20, 0.75);
     opacity: 1;
+}
+
+.keyboard-key.is-correct:disabled {
+    color: #f2d8c6;
+    background: #1f4a35;
+    border-color: #6fcf97;
+    font-weight: 700;
+}
+
+.keyboard-key.is-wrong:disabled {
+    border-style: dashed;
+    text-decoration: line-through;
+}
+
+.danger-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, rgba(120, 10, 20, 0.25) 0%, rgba(120, 10, 20, 0.55) 100%);
+    transition: opacity 700ms ease;
 }
 
 .result-alert {
@@ -177,4 +203,28 @@ button {
 
 .title {
     font-family: 'Rubik Distressed', system-ui, sans-serif;
+}
+
+:focus-visible,
+.btn:focus-visible {
+    outline: 3px solid var(--focus);
+    outline-offset: 3px;
+    box-shadow: none;
+}
+
+[tabindex="-1"]:focus {
+    outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .difficulty-button,
+    .keyboard-key,
+    .danger-overlay {
+        transition: none;
+    }
+
+    .difficulty-button:hover,
+    .keyboard-key:hover:not(:disabled) {
+        transform: none;
+    }
 }

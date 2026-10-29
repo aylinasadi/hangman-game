@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import usePageFocus from "../usePageFocus";
 
 
 
 export default function Game() {
     const location = useLocation();
     const navigate = useNavigate();
+    const headingRef = usePageFocus("Hangman – Game");
     const difficulty = location.state?.chosenDifficulty || "Easy";
     
     const livesByDifficulty = {
@@ -34,6 +36,16 @@ export default function Game() {
     const maxHints = word.length > 0 ? Math.floor(word.length / 2) : 0;
     const isLost = remainingLives <= 0;
     const isWon = word.length > 0 &&word.split("").every((letter) => guessedLetters.includes(letter));
+
+    const dangerLevel = Math.min(wrongGuessesCount / maxLives, 1);
+
+    const wordLabel = word.split("").map((l) => (guessedLetters.includes(l) ? l : "blank")).join(", ");
+    const lastLetter = guessedLetters[guessedLetters.length - 1];
+    const announcement = !lastLetter
+        ? ""
+        : word.includes(lastLetter)
+            ? `${lastLetter} is in the word. Word: ${wordLabel}.`
+            : `${lastLetter} is not in the word. ${remainingLives} ${remainingLives === 1 ? "life" : "lives"} left.`;
 
     useEffect(() => {
         const fetchWord = async () => {
@@ -70,6 +82,7 @@ export default function Game() {
     useEffect(() => {
         if (loading || isWon || isLost) return;
         const handleKeyPress = (event) => {
+            if (event.ctrlKey || event.metaKey || event.altKey) return;
             const key = event.key.toUpperCase();
             if (alphabet.includes(key)) {
                 handleGuess(key);
@@ -109,7 +122,10 @@ export default function Game() {
     
 
     return (
-        <div className="min-vh-100 d-flex flex-column p-4 p-md-5 text-center">
+        <main className="min-vh-100 d-flex flex-column p-4 p-md-5 text-center position-relative z-0">
+            <div className="danger-overlay" style={{ opacity: dangerLevel }} aria-hidden="true" />
+            <h1 ref={headingRef} tabIndex={-1} className="visually-hidden">Hangman</h1>
+            <p className="visually-hidden" role="status">{announcement}</p>
             <div className="d-flex justify-content-between align-items-center mb-3 fs-4">
                 <span className="game-stat">Difficulty: <strong>{difficulty}</strong></span>
                 <span className="game-stat">Hints Remaining: <strong>{maxHints - hintsUsed}</strong></span>
@@ -121,26 +137,37 @@ export default function Game() {
             </div>
             <div className="flex-grow-1 d-flex flex-column align-items-center justify-content-center">
                 <div className="word-display mb-5 font-monospace" style={{ fontSize: "5rem", letterSpacing: "1rem" }}>
-                    {loading ? (<p className="fs-3 text-muted">Loading word...</p>) :
-                    (word.split("").map((letter, index) => (
-                        <span key={index} className="mx-1">
-                            {guessedLetters.includes(letter) ? letter : "_"}
-                        </span>
-                    )))}
+                    {loading ? (<p className="fs-3 text-muted">Loading word...</p>) : (
+                        <>
+                            <span className="visually-hidden">Word: {wordLabel}</span>
+                            <span aria-hidden="true">
+                                {word.split("").map((letter, index) => (
+                                    <span key={index} className="mx-1">
+                                        {guessedLetters.includes(letter) ? letter : "_"}
+                                    </span>
+                                ))}
+                            </span>
+                        </>
+                    )}
                 </div>
-                <div className="d-flex flex-wrap justify-content-center gap-3" style={{ maxWidth: "1000px" }}>
-                    {alphabet.map((letter) => (
-                        <button
-                            key={letter}
-                            onClick={() => handleGuess(letter)}
-                            disabled={guessedLetters.includes(letter) || isWon || isLost}
-                            className="btn fs-4 keyboard-key"
-                        >
-                            {letter}
-                        </button>
-                    ))}
+                <div role="group" aria-label="Letters" className="d-flex flex-wrap justify-content-center gap-3" style={{ maxWidth: "1000px" }}>
+                    {alphabet.map((letter) => {
+                        const status = !guessedLetters.includes(letter) ? "" : word.includes(letter) ? "correct" : "wrong";
+                        return (
+                            <button
+                                key={letter}
+                                type="button"
+                                onClick={() => handleGuess(letter)}
+                                disabled={guessedLetters.includes(letter) || isWon || isLost}
+                                aria-label={status ? `${letter}, ${status}` : letter}
+                                className={`btn fs-4 keyboard-key ${status ? `is-${status}` : ""}`}
+                            >
+                                {letter}
+                            </button>
+                        );
+                    })}
                 </div>
             </div>
-        </div>
+        </main>
     );
 }

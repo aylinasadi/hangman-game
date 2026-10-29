@@ -1,5 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import usePageFocus from "../usePageFocus";
 
 
 
@@ -12,6 +13,7 @@ export default function GameOver() {
         score: 0,
         hintsUsed: 0,
     };
+    const headingRef = usePageFocus(hasWon ? "Hangman – You survived" : "Hangman – You died");
     const [definition, setDefinition] = useState(null);
     const [defLoading, setDefLoading] = useState(true);
     useEffect(() => {
@@ -41,15 +43,15 @@ export default function GameOver() {
     }, [secretWord]);
 
     return (
-        <div className="min-vh-100 d-flex align-items-center justify-content-center p-3">
+        <main className="min-vh-100 d-flex align-items-center justify-content-center p-3">
             <div className="card shadow p-5 text-center w-100" style={{ maxWidth: "800px" }}>
                 <div className={`alert result-alert ${hasWon ? "is-win" : "is-loss"} my-3 py-4`}>
-                    <h1 className="display-3 fw-bold alert-heading mb-0">{hasWon ? "You Survived!" : "You Died."}</h1>
+                    <h1 ref={headingRef} tabIndex={-1} className="display-3 fw-bold alert-heading mb-0">{hasWon ? "You Survived!" : "You Died."}</h1>
                 </div>
                 <p className="display-6 mt-4">
                     The secret word was: <span className="badge secret-word font-monospace">{secretWord}</span>
                 </p>
-                <p className="fs-4 mb-0">
+                <p className="fs-4 mb-0" aria-live="polite">
                     {defLoading ? "Loading definition..." : definition ? `Definition: ${definition}` : "Oops! No definition found. You had a very rare word:)"}
                 </p>
                 {hasWon && <p className="text-muted fs-4 my-4">Remaining Lives: {score}</p>}
@@ -58,6 +60,6 @@ export default function GameOver() {
                     <button className="btn btn-lg fs-3 px-5 py-3 home-button" onClick={() => navigate("/")}>Home</button>
                 </div>
             </div>
-        </div>
+        </main>
     );
 }
