@@ -202,15 +202,16 @@ button {
     pointer-events: none;
     background: radial-gradient(ellipse at center, transparent 35%, rgba(170, 12, 24, 0.4) 100%);
     opacity: 0;
-    animation: heartbeat 1.6s ease-in-out infinite;
+    animation: heartbeat 1.25s ease-in-out infinite;
 }
 
 @keyframes heartbeat {
     0%   { opacity: 0; }
-    14%  { opacity: 0.9; }
-    28%  { opacity: 0.2; }
-    42%  { opacity: 0.7; }
-    70%, 100% { opacity: 0; }
+    4%   { opacity: 0.9; }
+    12%  { opacity: 0.2; }
+    28%  { opacity: 0.7; }
+    38%  { opacity: 0.1; }
+    65%, 100% { opacity: 0; }
 }
 
 .shake {

@@ -1,6 +1,7 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import usePageFocus from "../usePageFocus";
+import sfx from "../sound";
 
 
 
@@ -14,6 +15,15 @@ export default function GameOver() {
         hintsUsed: 0,
     };
     const headingRef = usePageFocus(hasWon ? "Hangman – You survived" : "Hangman – You died");
+
+    useEffect(() => {
+        if (!location.state) return;
+        sfx.stop("heartbeat");
+        const resultSound = hasWon ? "win" : "lose";
+        sfx.play(resultSound, { exclusive: true });
+        return () => sfx.stop(resultSound);
+    }, [location.state, hasWon]);
+
     const [definition, setDefinition] = useState(null);
     const [defLoading, setDefLoading] = useState(true);
     useEffect(() => {

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import usePageFocus from "../usePageFocus";
+import SoundToggle from "../SoundToggle";
 
 
 export default function Home() {
@@ -30,6 +31,9 @@ export default function Home() {
                     ))}
                 </div>
                 <button className="btn btn-lg fs-3 w-100 py-3 start-button" onClick={startGame}>Start Game</button>
+                <div className="mt-4">
+                    <SoundToggle />
+                </div>
             </div>
         </main>
     );

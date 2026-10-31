@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import usePageFocus from "../usePageFocus";
+import sfx from "../sound";
+import SoundToggle from "../SoundToggle";
 
 
 
@@ -80,6 +82,14 @@ export default function Game() {
     }, [isWon, isLost, navigate, word, remainingLives, hintsUsed]);
 
     useEffect(() => {
+        if (remainingLives !== 1 || isWon || isLost) return;
+        sfx.play("heartbeat", { exclusive: true, loop: true });
+        return () => {
+            sfx.stop("heartbeat");
+        };
+    }, [remainingLives, isWon, isLost]);
+
+    useEffect(() => {
         if (loading || isWon || isLost) return;
         const handleKeyPress = (event) => {
             if (event.ctrlKey || event.metaKey || event.altKey) return;
@@ -95,6 +105,8 @@ export default function Game() {
     }, [loading, isWon, isLost, alphabet, guessedLetters]);
 
     const handleGuess = (letter) => {
+        if (guessedLetters.includes(letter)) return;
+        sfx.play(word.includes(letter) ? "correct" : "wrong");
         setGuessedLetters((prevGuessed) => {
         if (prevGuessed.includes(letter)) return prevGuessed;
         return [...prevGuessed, letter];
@@ -108,6 +120,7 @@ export default function Game() {
         if (unguessedLetters.length === 0) return;
 
         const randomLetter = unguessedLetters[Math.floor(Math.random() * unguessedLetters.length)];
+        sfx.play("hint");
         setGuessedLetters((prev) => [...prev, randomLetter]);
         setHintsUsed((prev) => prev + 1);
     };
@@ -135,6 +148,7 @@ export default function Game() {
             </div>
             <div className="d-flex justify-content-between mb-3">
                 <button className="btn btn-lg px-4 hint-button" onClick={handleHint} disabled={loading || isWon || isLost || hintsUsed >= maxHints}>Hint</button>
+                <SoundToggle />
                 <button className="btn btn-lg text-uppercase px-4 quit-button" onClick={handleQuit}>Quit</button>
             </div>
             <div className="flex-grow-1 d-flex flex-column align-items-center justify-content-center">
