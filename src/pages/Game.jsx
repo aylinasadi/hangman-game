@@ -124,6 +124,8 @@ export default function Game() {
     return (
         <main className="min-vh-100 d-flex flex-column p-4 p-md-5 text-center position-relative z-0">
             <div className="danger-overlay" style={{ opacity: dangerLevel }} aria-hidden="true" />
+            {wrongGuessesCount > 0 && <div key={wrongGuessesCount} className="danger-pulse" aria-hidden="true" />}
+            {remainingLives === 1 && <div className="danger-heartbeat" aria-hidden="true" />}
             <h1 ref={headingRef} tabIndex={-1} className="visually-hidden">Hangman</h1>
             <p className="visually-hidden" role="status">{announcement}</p>
             <div className="d-flex justify-content-between align-items-center mb-3 fs-4">
@@ -136,7 +138,7 @@ export default function Game() {
                 <button className="btn btn-lg text-uppercase px-4 quit-button" onClick={handleQuit}>Quit</button>
             </div>
             <div className="flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-                <div className="word-display mb-5 font-monospace" style={{ fontSize: "5rem", letterSpacing: "1rem" }}>
+                <div key={wrongGuessesCount} className={`word-display mb-5 font-monospace ${wrongGuessesCount > 0 ? "shake" : ""}`} style={{ fontSize: "5rem", letterSpacing: "1rem" }}>
                     {loading ? (<p className="fs-3 text-muted">Loading word...</p>) : (
                         <>
                             <span className="visually-hidden">Word: {wordLabel}</span>
