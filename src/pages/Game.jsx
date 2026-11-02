@@ -53,14 +53,34 @@ export default function Game() {
         const fetchWord = async () => {
             try {
                 setLoading(true);
-                const pattern = "?".repeat(targetLength);
-                const response = await fetch(`https://api.datamuse.com/words?sp=${pattern}&max=100`);
-                const data = await response.json();
-                const singleWords = data.filter((item) => /^[a-zA-Z]+$/.test(item.word));
-                const randomIndex = Math.floor(Math.random() * singleWords.length);
-                setWord(singleWords[randomIndex].word.toUpperCase());
+
+                while (true) {
+
+                    const pattern = "?".repeat(targetLength);
+                    const response = await fetch(`https://api.datamuse.com/words?sp=${pattern}&max=100`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+                    const singleWords = data.filter((item) => /^[a-zA-Z]+$/.test(item.word));
+                    if (singleWords.length === 0) {
+                        throw new Error("No suitable words were found.");
+                    }
+                    
+                    const randomIndex = Math.floor(Math.random() * singleWords.length);
+                    
+                    setWord(singleWords[randomIndex].word.toUpperCase());
+                    break;
+                }
             } catch (error) {
                 console.error("Error fetching word:", error);
+                const retry = window.confirm("Failed to fetch a word. Would you like to try again?");
+                if (retry) {
+                    await fetchWord();
+                } else {
+                    navigate("/");
+                }
             } finally {
                 setLoading(false);
             }
