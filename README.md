@@ -37,13 +37,13 @@ Players can also use hints to reveal randomly selected letters. The number of av
 The application consists of three screens:
 
 1. **Home:** Select a difficulty level and start a new game.
-![Home Screen](./screenshots/home.png)
+![Home Screen](./screenshots/home.jpg)
 
 2. **Game:** Guess letters, monitor remaining lives, use hints, and manage sound settings.
-![Game Screen](./screenshots/game.png)
+![Game Screen](./screenshots/game.jpg)
 
 3. **Game Over:** View the result, reveal the secret word, and see its definition when available.
-![Game Over Screen](./screenshots/game-over.png)
+![Game Over Screen](./screenshots/game-over.jpg)
 
 
 ## Technologies Used
