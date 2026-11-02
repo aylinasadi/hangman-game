@@ -137,6 +137,8 @@ Deployment is automated through GitHub Actions. Every push to the `main` branch 
 
 **Live application:** https://aylinasadi.github.io/hangman-game/
 
----
+## Future Improvements
 
-Developed as a university final project.
+- Implement an animated 3D hangman figure that reacts to incorrect guesses.
+- Add personal gameplay statistics, including win rate, games played, and winning streaks.
+- Introduce a global leaderboard to compare player scores.
