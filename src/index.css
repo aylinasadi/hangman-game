@@ -144,6 +144,10 @@ button {
 .word-display {
     color: var(--bone);
     text-shadow: 0 0 1.5rem rgba(143, 41, 49, 0.28);
+    width: 100%;
+    max-width: 100%;
+    font-size: 5rem;
+    letter-spacing: 1rem;
 }
 
 .word-letters {

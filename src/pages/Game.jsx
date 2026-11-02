@@ -168,7 +168,7 @@ export default function Game() {
                 <button className="btn btn-lg text-uppercase px-4 quit-button" onClick={handleQuit}>Quit</button>
             </div>
             <div className="flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-                <div key={wrongGuessesCount} className={`word-display mb-5 font-monospace ${wrongGuessesCount > 0 ? "shake" : ""}`} style={{ fontSize: "5rem", letterSpacing: "1rem" }}>
+                <div key={wrongGuessesCount} className={`word-display mb-5 font-monospace ${wrongGuessesCount > 0 ? "shake" : ""}`}>
                     {loading ? (<p className="fs-3 text-muted">Loading word...</p>) : (
                         <>
                             <span className="visually-hidden">Word: {wordLabel}</span>
