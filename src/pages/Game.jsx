@@ -53,26 +53,22 @@ export default function Game() {
         const fetchWord = async () => {
             try {
                 setLoading(true);
-
-                while (true) {
-
-                    const pattern = "?".repeat(targetLength);
-                    const response = await fetch(`https://api.datamuse.com/words?sp=${pattern}&max=100`);
-                    if (!response.ok) {
-                        throw new Error(`HTTP error: ${response.status}`);
-                    }
-                    
-                    const data = await response.json();
-                    const singleWords = data.filter((item) => /^[a-zA-Z]+$/.test(item.word));
-                    if (singleWords.length === 0) {
-                        throw new Error("No suitable words were found.");
-                    }
-                    
-                    const randomIndex = Math.floor(Math.random() * singleWords.length);
-                    
-                    setWord(singleWords[randomIndex].word.toUpperCase());
-                    break;
+                
+                const pattern = "?".repeat(targetLength);
+                const response = await fetch(`https://api.datamuse.com/words?sp=${pattern}&max=100`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error: ${response.status}`);
                 }
+                
+                const data = await response.json();
+                const singleWords = data.filter((item) => /^[a-zA-Z]+$/.test(item.word));
+                if (singleWords.length === 0) {
+                    throw new Error("No suitable words were found.");
+                }
+                
+                const randomIndex = Math.floor(Math.random() * singleWords.length);
+                
+                setWord(singleWords[randomIndex].word.toUpperCase());
             } catch (error) {
                 console.error("Error fetching word:", error);
                 const retry = window.confirm("Failed to fetch a word. Would you like to try again?");
@@ -162,8 +158,8 @@ export default function Game() {
             <h1 ref={headingRef} tabIndex={-1} className="visually-hidden">Hangman</h1>
             <p className="visually-hidden" role="status">{announcement}</p>
             <div className="d-flex justify-content-between align-items-center mb-3 fs-4">
-                <span className="game-stat">Difficulty: <strong>{difficulty}</strong></span>
                 <span className="game-stat">Hints Remaining: <strong>{maxHints - hintsUsed}</strong></span>
+                <span className="game-stat">Difficulty: <strong>{difficulty}</strong></span>
                 <span className="text-danger">Lives Remaining: {remainingLives} / {maxLives}</span>
             </div>
             <div className="d-flex justify-content-between mb-3">
