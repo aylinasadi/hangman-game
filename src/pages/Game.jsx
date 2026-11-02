@@ -151,18 +151,18 @@ export default function Game() {
     
 
     return (
-        <main className="min-vh-100 d-flex flex-column p-4 p-md-5 text-center position-relative z-0">
+        <main className="game-page min-vh-100 d-flex flex-column p-4 p-md-5 text-center position-relative z-0">
             <div className="danger-overlay" style={{ opacity: dangerLevel }} aria-hidden="true" />
             {wrongGuessesCount > 0 && <div key={wrongGuessesCount} className="danger-pulse" aria-hidden="true" />}
             {remainingLives === 1 && <div className="danger-heartbeat" aria-hidden="true" />}
             <h1 ref={headingRef} tabIndex={-1} className="visually-hidden">Hangman</h1>
             <p className="visually-hidden" role="status">{announcement}</p>
-            <div className="d-flex justify-content-between align-items-center mb-3 fs-4">
+            <div className="game-stats d-flex justify-content-between align-items-center mb-3 fs-4">
                 <span className="game-stat">Hints Remaining: <strong>{maxHints - hintsUsed}</strong></span>
                 <span className="game-stat">Difficulty: <strong>{difficulty}</strong></span>
-                <span className="text-danger">Lives Remaining: {remainingLives} / {maxLives}</span>
+                <span className="text-danger game-stat-lives">Lives Remaining: {remainingLives} / {maxLives}</span>
             </div>
-            <div className="d-flex justify-content-between mb-3">
+            <div className="game-actions d-flex justify-content-between mb-3">
                 <button className="btn btn-lg px-4 hint-button" onClick={handleHint} disabled={loading || isWon || isLost || hintsUsed >= maxHints}>Hint</button>
                 <SoundToggle />
                 <button className="btn btn-lg text-uppercase px-4 quit-button" onClick={handleQuit}>Quit</button>
@@ -172,9 +172,9 @@ export default function Game() {
                     {loading ? (<p className="fs-3 text-muted">Loading word...</p>) : (
                         <>
                             <span className="visually-hidden">Word: {wordLabel}</span>
-                            <span aria-hidden="true">
+                            <span aria-hidden="true" className="word-letters">
                                 {word.split("").map((letter, index) => (
-                                    <span key={index} className="mx-1">
+                                    <span key={index} className="word-letter">
                                         {guessedLetters.includes(letter) ? letter : "_"}
                                     </span>
                                 ))}
@@ -182,7 +182,7 @@ export default function Game() {
                         </>
                     )}
                 </div>
-                <div role="group" aria-label="Letters" className="d-flex flex-wrap justify-content-center gap-3" style={{ maxWidth: "1000px" }}>
+                <div role="group" aria-label="Letters" className="game-keyboard d-flex flex-wrap justify-content-center gap-3" style={{ maxWidth: "1000px" }}>
                     {alphabet.map((letter) => {
                         const status = !guessedLetters.includes(letter) ? "" : word.includes(letter) ? "correct" : "wrong";
                         return (

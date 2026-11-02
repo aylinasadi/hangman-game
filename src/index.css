@@ -146,6 +146,19 @@ button {
     text-shadow: 0 0 1.5rem rgba(143, 41, 49, 0.28);
 }
 
+.word-letters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 0.15em;
+    row-gap: 0.2em;
+    width: 100%;
+}
+
+.word-letter {
+    display: inline-block;
+}
+
 .keyboard-key {
     min-width: 3.75rem;
     min-height: 3.75rem;
@@ -286,5 +299,49 @@ button {
     .danger-heartbeat {
         animation: none;
         opacity: 0.5;
+    }
+}
+
+@media (max-width: 576px) {
+    .game-page {
+        padding: 1rem !important;
+    }
+
+    .game-stats {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.5rem;
+        font-size: 0.95rem !important;
+    }
+
+    .game-stat-lives {
+        grid-column: 1 / -1;
+    }
+
+    .game-actions {
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .game-actions .btn {
+        font-size: 0.9rem;
+        padding: 0.45rem 0.7rem !important;
+    }
+
+    .word-display {
+        font-size: clamp(2rem, 8vw, 3rem);
+        letter-spacing: 0;
+        margin-bottom: 1.5rem !important;
+    }
+
+    .game-keyboard {
+        gap: 0.35rem !important;
+    }
+
+    .keyboard-key {
+        font-size: 1rem !important;
+        min-width: 2.75rem;
+        min-height: 2.75rem;
+        padding: 0.3rem !important;
     }
 }
