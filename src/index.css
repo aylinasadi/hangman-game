@@ -349,3 +349,9 @@ button {
         padding: 0.3rem !important;
     }
 }
+
+.game-error {
+    font-family: system-ui, sans-serif;
+    font-size: 1.25rem;
+    letter-spacing: normal;
+}

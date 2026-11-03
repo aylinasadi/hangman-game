@@ -70,7 +70,7 @@ Two API requests are used:
 The `/words` endpoint uses the `sp` parameter with a wildcard pattern to retrieve words matching the required length.
 
 ```text
-https://api.datamuse.com/words?sp=?????&max=100
+https://api.datamuse.com/words?sp=?????&max=300
 ```
 
 The application filters the returned results to include single alphabetic words and randomly selects one for the game.

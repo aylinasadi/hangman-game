@@ -11,14 +11,8 @@ export default function SoundToggle() {
     };
 
     return (
-        <button
-            type="button"
-            aria-pressed={!muted}
-            aria-label="Sound effects"
-            onClick={toggle}
-            className={`btn btn-lg px-4 difficulty-button ${!muted ? "is-selected" : ""}`}
-        >
-            Sound <span aria-hidden="true">{muted ? "Off" : "On"}</span>
+        <button type="button" onClick={toggle} className={`btn btn-lg px-4 difficulty-button ${!muted ? "is-selected" : ""}`}>
+            Sound: {muted ? "Off" : "On"}
         </button>
     );
 }

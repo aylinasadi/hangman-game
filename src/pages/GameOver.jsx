@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import usePageFocus from "../usePageFocus";
 import sfx from "../sound";
@@ -24,16 +24,15 @@ export default function GameOver() {
         return () => sfx.stop(resultSound);
     }, [location.state, hasWon]);
 
+    const hasWord = Boolean(secretWord) && secretWord !== "Unknown";
     const [definition, setDefinition] = useState(null);
-    const [defLoading, setDefLoading] = useState(true);
+    const [defLoading, setDefLoading] = useState(hasWord);
+    
     useEffect(() => {
-        if (!secretWord || secretWord === "Unknown") {
-            setDefLoading(false);
-            return;
-        }
+        if (!hasWord) return;
+
         const fetchDefinition = async () => {
             try {
-                setDefLoading(true);
                 const response = await fetch(`https://api.datamuse.com/words?sp=${secretWord.toLowerCase()}&md=d&max=1`);
                 const data = await response.json();
                 if (data.length > 0 && data[0].defs && data[0].defs.length > 0) {
@@ -50,7 +49,9 @@ export default function GameOver() {
             }
         };
         fetchDefinition();
-    }, [secretWord]);
+    }, [hasWord, secretWord]);
+
+    if (!location.state) return <Navigate to="/" replace />;
 
     return (
         <main className="min-vh-100 d-flex align-items-center justify-content-center p-3">

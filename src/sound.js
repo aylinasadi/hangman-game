@@ -8,14 +8,17 @@ const FILES = {
 };
 
 let muted = false;
-const activeAudio = new Map();
 try {
     muted = localStorage.getItem("hangman-muted") === "1";
 } catch {
-
+    /* keep sound on */
 }
 
-function stop(name) {
+const activeAudio = new Map(); // name -> the audio that is playing atm
+const loops = new Set();       // looping sounds that should be playing even while muted
+
+// pause a sound but keep it in loops so it can come back after unmuting
+function halt(name) {
     const audio = activeAudio.get(name);
     if (!audio) return;
     audio.pause();
@@ -23,15 +26,16 @@ function stop(name) {
     activeAudio.delete(name);
 }
 
-function stopAll() {
-    for (const name of activeAudio.keys()) {
-        stop(name);
-    }
+// stop a sound compeltely and remove it from loops so it wont come back after unmuting
+function stop(name) {
+    loops.delete(name);
+    halt(name);
 }
 
 function play(name, { exclusive = false, loop = false } = {}) {
+    if (loop) loops.add(name);
     if (muted) return;
-    if (exclusive) stop(name);
+    if (exclusive) halt(name);
     const audio = new Audio(FILES[name]);
     audio.volume = 0.6;
     audio.loop = loop;
@@ -48,14 +52,18 @@ function isMuted() {
 
 function setMuted(value) {
     muted = value;
-    if (value) stopAll();
     try {
         localStorage.setItem("hangman-muted", value ? "1" : "0");
     } catch {
-
+        /* ignore */
     }
-    if (!value) play("correct");
+    if (value) {
+        [...activeAudio.keys()].forEach(halt);
+    } else {
+        loops.forEach((name) => play(name, { exclusive: true, loop: true }));
+        play("correct");
+    }
 }
 
-const sfx = { play, stop, stopAll, isMuted, setMuted };
+const sfx = { play, stop, isMuted, setMuted };
 export default sfx;
